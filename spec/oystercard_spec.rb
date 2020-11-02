@@ -16,10 +16,10 @@ describe Oystercard do
   end
 
   context '#max limit' do
-    it 'raises error :you have exeeded your max balance if over limit' do
+    it 'Raises error if top up is over limit' do
       limit = Oystercard::LIMIT
       subject.top_up(limit)
-      expect { subject.top_up(1) }.to raise_error "you have exeeded your max balance of #{limit}"
+      expect { subject.top_up(1) }.to raise_error "you have exeeded your max balance of £#{limit}"
     end
   end
 
@@ -36,25 +36,33 @@ describe Oystercard do
       expect(subject).not_to be_in_journey
     end
   end
-  context '#Touching in/out' do
+
+  context '#Touching in' do
     it { is_expected.to respond_to :touch_in }
 
-    it 'touching in will change status of in_journey to true' do
+    it 'changes return to in journey on touch in' do
       subject.top_up(5)
       subject.touch_in
       expect(subject).to be_in_journey
     end
 
-    it 'will raise an error if user touches in without money in balance' do 
-      expect { subject.touch_in }.to raise_error "not enough balance"
+    it 'throws error if touching in without enough money' do
+      expect { subject.touch_in }.to raise_error 'not enough balance'
     end
+  end
 
-    it 'touching out in will change status of in_journey to false' do
+  context '#Touching out' do
+    it 'changes returns not in journey on touch out' do
       subject.top_up(5)
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey
     end
+
+    # it "touch_out changes card status to 'not in use'" do
+    #   subject.instance_variable_set(:@in_journey, true)
+    #   expect { subject.touch_out }.to change { subject.in_journey }.from(true).to(false)
+    # end
 
     # it 'will raise an error if user touches out whilst not in journey' do
     #   expect { subject.touch_out }.to raise_error 'not in journey'
