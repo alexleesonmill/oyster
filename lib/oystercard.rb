@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Oystercard
   attr_reader :balance, :in_journey
 

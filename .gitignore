@@ -1,0 +1,9 @@
+.DS_Store
+.rubocop-upgraded.yml
+disabled-upgraded.yml
+enabled-upgraded.yml
+analysis/**/*
+.gitignore-analysis
+
+# Local cache of Rubocop remote config
+.rubocop-*
