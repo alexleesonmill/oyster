@@ -36,7 +36,7 @@ describe Oystercard do
 
     it 'stores the entry station of the journey' do
       topped_up_card.touch_in(station)
-      expect(topped_up_card.entry_station).to eq station
+      expect(topped_up_card.current_journey.entry_station).to eq station
     end
 
     it 'changes return to in journey on touch in' do
@@ -46,6 +46,11 @@ describe Oystercard do
 
     it 'throws error if touching in without enough money' do
       expect { subject.touch_in(station) }.to raise_error 'not enough balance'
+    end
+
+    it "should charge penalty fare of £#{Journey::PENALTY_FARE} if touching in twice" do
+      topped_up_card.touch_in(station)
+      expect { topped_up_card.touch_in(station) }.to change { topped_up_card.balance }.by(-Journey::PENALTY_FARE)
     end
   end
 
@@ -66,7 +71,8 @@ describe Oystercard do
     # end
 
     it 'deducts the minimum fare on touch out' do
-      expect { topped_up_card.touch_out(station) }.to change { topped_up_card.balance }. by(-Oystercard::MIN_FARE)
+      topped_up_card.touch_in(station)
+      expect { topped_up_card.touch_out(station) }.to change { topped_up_card.balance }. by(-Journey::MIN_FARE)
     end
 
     it 'Should have an empty journey list by default' do
@@ -75,6 +81,10 @@ describe Oystercard do
     it 'Touching in and out should create one journey' do
       topped_up_card.touch_in(station)
       expect { topped_up_card.touch_out(station) }.to change { topped_up_card.journeys.length }.by(1)
+    end
+
+    it "should charge penalty fare of £#{Journey::PENALTY_FARE} if touching out with not touch in" do
+      expect { topped_up_card.touch_out(station) }.to change { topped_up_card.balance }. by(-Journey::PENALTY_FARE)
     end
   end
 end
