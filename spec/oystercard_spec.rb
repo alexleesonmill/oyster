@@ -24,14 +24,6 @@ describe Oystercard do
     end
   end
 
-  context '#Deduct Money' do
-    it { is_expected.to respond_to(:deduct).with(1).argument }
-
-    it 'can deduct money from the balance of the card' do
-      expect { subject.deduct(5) }.to change { subject.balance }.by(-5)
-    end
-  end
-
   context '#Journey status' do
     it 'user will initlialize "not in journey"' do
       expect(subject).not_to be_in_journey
@@ -66,5 +58,9 @@ describe Oystercard do
     # it 'will raise an error if user touches out whilst not in journey' do
     #   expect { subject.touch_out }.to raise_error 'not in journey'
     # end
+
+    it 'deducts the minimum fare on touch out' do
+      expect { topped_up_card.touch_out }.to change { topped_up_card.balance }. by(-Oystercard::MIN_FARE)
+    end
   end
 end
