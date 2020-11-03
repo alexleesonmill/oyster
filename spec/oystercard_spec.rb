@@ -52,7 +52,7 @@ describe Oystercard do
   context '#Touching out' do
     it 'changes returns not in journey on touch out' do
       topped_up_card.touch_in(station)
-      topped_up_card.touch_out
+      topped_up_card.touch_out(station)
       expect(topped_up_card).not_to be_in_journey
     end
 
@@ -66,7 +66,15 @@ describe Oystercard do
     # end
 
     it 'deducts the minimum fare on touch out' do
-      expect { topped_up_card.touch_out }.to change { topped_up_card.balance }. by(-Oystercard::MIN_FARE)
+      expect { topped_up_card.touch_out(station) }.to change { topped_up_card.balance }. by(-Oystercard::MIN_FARE)
+    end
+
+    it 'Should have an empty journey list by default' do
+      expect(subject.journeys.length).to eq(0)
+    end
+    it 'Touching in and out should create one journey' do
+      topped_up_card.touch_in(station)
+      expect { topped_up_card.touch_out(station) }.to change { topped_up_card.journeys.length }.by(1)
     end
   end
 end
