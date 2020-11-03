@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 class Oystercard
-  attr_reader :balance, :in_journey
+  attr_reader :balance, :entry_station
 
   LIMIT = 90
   MIN_FARE = 1
 
   def initialize(balance = 0)
     @balance = balance
-    @in_journey = false
+    @entry_station = nil
   end
 
   def in_journey?
-    @in_journey
+    @entry_station ? true : false
   end
 
   def top_up(amount)
@@ -21,16 +21,16 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(station)
     raise 'not enough balance' if balance < MIN_FARE
 
-    @in_journey = true
+    @entry_station = station
   end
 
   def touch_out
     # raise 'not in journey' if @in_journey == false
     deduct(MIN_FARE)
-    @in_journey = false
+    @entry_station = nil
   end
 
   private
