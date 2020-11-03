@@ -4,8 +4,8 @@ class Oystercard
   LIMIT = 90
   MIN_FARE = 1
 
-  def initialize
-    @balance = 0
+  def initialize(balance = 0)
+    @balance = balance
     @in_journey = false
   end
 

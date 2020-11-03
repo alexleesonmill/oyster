@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+  let(:topped_up_card) { Oystercard.new(10) }
   context '#balance' do
     it 'when created has a balance of 0' do
       expect(subject.balance).to eq 0
@@ -41,9 +42,8 @@ describe Oystercard do
     it { is_expected.to respond_to :touch_in }
 
     it 'changes return to in journey on touch in' do
-      subject.top_up(5)
-      subject.touch_in
-      expect(subject).to be_in_journey
+      topped_up_card.touch_in
+      expect(topped_up_card).to be_in_journey
     end
 
     it 'throws error if touching in without enough money' do
@@ -53,10 +53,9 @@ describe Oystercard do
 
   context '#Touching out' do
     it 'changes returns not in journey on touch out' do
-      subject.top_up(5)
-      subject.touch_in
-      subject.touch_out
-      expect(subject).not_to be_in_journey
+      topped_up_card.touch_in
+      topped_up_card.touch_out
+      expect(topped_up_card).not_to be_in_journey
     end
 
     # it "touch_out changes card status to 'not in use'" do
