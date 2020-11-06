@@ -42,7 +42,6 @@ class Oystercard
   def end_journey
     deduct(@current_journey.fare)
     save_journey
-    @current_journey = nil
   end
 
   def deduct(amount)

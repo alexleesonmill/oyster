@@ -21,7 +21,7 @@ describe Oystercard do
 
   context '#max limit' do
     it 'Raises error if top up is over limit' do
-      expect { topped_up_card.top_up(81) }.to raise_error "you have exeeded your max balance of £#{Oystercard::LIMIT}"
+      expect { topped_up_card.top_up(Oystercard::LIMIT) }.to raise_error "you have exeeded your max balance of £#{Oystercard::LIMIT}"
     end
   end
 
